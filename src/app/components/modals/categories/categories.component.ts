@@ -28,59 +28,111 @@ import { StorageService } from 'src/app/services/storage/storage.service';
 })
 export class CategoriesComponent  implements OnInit {
 
-  @Input() categoryList: Array<string> = [];  
+  /**
+   * @property categoryList
+   * @type {Array<string>}
+   * @description Array de categorías que se pasa desde el componente padre (TaskListComponent)
+   * para que el usuario pueda seleccionar una al crear la tarea.
+   */
+  @Input() categoryList: Array<string> = [];
 
-  // public categoryList: Array<string> = ['Urgente', 'Normal', 'No urgente'];
-
+  /**
+   * @property newCategoryName
+   * @type {string}
+   * @description Modelo para el input de la nueva categoría. Almacena el nombre de la categoría que el usuario quiere agregar.
+   */
   public newCategoryName: string = '';
 
+  /**
+   * @property editingCategoryIndex
+   * @type {number | null}
+   * @description Almacena el índice de la categoría que el usuario está editando.
+   * Si no se está editando ninguna categoría, su valor es null.
+   */
   public editingCategoryIndex: number | null = null;
 
+  /**
+   * @constructor
+   * @param {ModalController} _modalCtrl 
+   * @param {StorageService} _storageService 
+   */
   constructor(
     private _modalCtrl: ModalController,
     private _storageService: StorageService
   ) { }
 
-  ngOnInit() {
-    // this.loadCategories();
-  }
+  /**
+   * @OnInit
+   */
+  ngOnInit() { }
 
-  closeModal() {
-    this._modalCtrl.dismiss();
-  }
-
-  public closeModalWithSave() {
+  /**
+   * @method closeModalWithSave
+   * @returns {void}
+   * @description Cierra el modal y pasa la lista de categorías actualizada al componente padre con el rol 'saved'.
+   */
+  public closeModalWithSave(): void {
     this._modalCtrl.dismiss({ updatedCategories: this.categoryList }, 'saved');
   }
 
-  public async addCategory() {
+  /**
+   * @method addCategory
+   * @async
+   * @returns {void}
+   * @description Agrega una nueva categoría a la 'categoryList' si el nombre no está vacío.
+   * Luego, guarda la lista actualizada en el almacenamiento local y limpia el input.
+   */
+  public async addCategory(): Promise<void> {
     if (this.newCategoryName.trim() !== '') {
       this.categoryList.push(this.newCategoryName.trim());
-      await this.saveCategorie();
+      await this.saveCategoriesToStorage();
       this.newCategoryName = '';
     }
   }
 
-  public startEditCategory(index: number) {
+  /**
+   * @method startEditCategory
+   * @param {number} index Número del índice de la categoría que se va a editar.
+   * @returns {void}
+   * @description Establece el índice de la categoría que se está editando para mostrar el input de edición.
+   */
+  public startEditCategory(index: number): void {
     this.editingCategoryIndex = index;
   }
 
-  public async saveEditedCategory() {
+  /**
+   * @method saveEditedCategory
+   * @async
+   * @returns {void}
+   * @description Guarda la categoría editada en la 'categoryList' y restablece el índice de edición.
+   * Luego, guarda la lista actualizada en el almacenamiento local
+   */
+  public async saveEditedCategory(): Promise<void> {
     this.editingCategoryIndex = null;
-    await this.saveCategorie();
+    await this.saveCategoriesToStorage();
   }
 
-  public async deleteCategory(index: number) {
+  /**
+   * @method deleteCategory
+   * @async
+   * @param {number} index Número del índice de la categoría que se va a eliminar.
+   * @returns {void}
+   * @description Elimina una categoría de la 'categoryList' en el índice especificado y guarda la lista actualizada en 
+   * el almacenamiento local.
+   */
+  public async deleteCategory(index: number): Promise<void> {
     this.categoryList.splice(index, 1);
-    await this.saveCategorie();
+    await this.saveCategoriesToStorage();
   }
 
-  // private async loadCategories() {
-  //   const storedCategories = await this._storageService.getValue('categories');
-  //   if(storedCategories) this.categoryList = JSON.parse(storedCategories);
-  // }
-
-  private async saveCategorie() {
+  /**
+   * @private
+   * @async
+   * @method saveCategoriesToStorage
+   * @returns {Promise<void>}
+   * @description Guarda la 'categoryList' actual en el almacenamiento local.
+   */
+  private async saveCategoriesToStorage(): Promise<void> {
     await this._storageService.setValue('categories', this.categoryList);
   }
 }

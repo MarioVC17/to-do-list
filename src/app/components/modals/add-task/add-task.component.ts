@@ -27,7 +27,7 @@ export class AddTaskComponent  implements OnInit {
 
   /**
    * @property categoryList
-   * @type Array<string>
+   * @type {Array<string>}
    * @description Array de categorías que se pasa desde el componente padre (TaskListComponent)
    * para que el usuario pueda seleccionar una al crear la tarea.
    */
