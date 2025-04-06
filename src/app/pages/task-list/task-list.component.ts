@@ -41,7 +41,7 @@ export class TaskListComponent  implements OnInit {
   /**
    * @property taskList
    * @type {Array<{ name: string; status: boolean, categorie: string }>}
-   * @description-  Array que almacena todas las tareas. Cada tarea tiene un nombre, estado (completada o no) y categoría.
+   * @description Array que almacena todas las tareas. Cada tarea tiene un nombre, estado (completada o no) y categoría.
    */
   public taskList: Array<{ name: string; status: boolean, categorie: string }> = [];
 
@@ -87,6 +87,7 @@ export class TaskListComponent  implements OnInit {
 
   /**
    * @OnInit
+   * @async
    * @description Hook del ciclo de vida que se ejecuta una vez que el componente ha sido inicializado, en este
    * se carga las tareas y las categorías desde el almacenamiento local y aplica el filtro inicial.
    */
