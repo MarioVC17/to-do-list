@@ -9,13 +9,13 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <ion-item lines="none" style="border: solid 1px #000; border-radius: 10px; margin: 10px" button (click)="addTask()" >
+  <ion-item lines="none" style="border: solid 1px #000; border-radius: 10px; margin: 10px" button (click)="openAddTaskModal()" >
     <ion-label>Crear Tarea</ion-label>
     <ion-icon slot="end" color="medium" name="add"></ion-icon>
   </ion-item>
   <ion-item>
     <ion-label>Filtrar por:</ion-label>
-    <ion-select [(ngModel)]="selectedFilterCategory" (ionChange)="filterTasks()">
+    <ion-select [(ngModel)]="selectedFilterCategory" (ionChange)="applyCategoryFilter()">
       <ion-select-option value="">Todas</ion-select-option>
       @for (category of categoryList; track $index) {
         <ion-select-option [value]="category">{{ category }}</ion-select-option>
@@ -33,7 +33,7 @@
           <ion-checkbox
            labelPlacement="end"
            [checked]="item.status"
-           (ionChange)="updateTaskStatus(item)"
+           (ionChange)="toggleTaskStatus(item)"
            >
            {{item.name}}
           </ion-checkbox>
@@ -57,7 +57,7 @@
         <ion-item mode="ios" lines="none">
           {{item.name}}
           <ion-badge slot="end">{{item.categorie}}</ion-badge>
-          <ion-icon button (click)="updateTaskStatus(item)" slot="end" name="return-up-back-outline"></ion-icon>
+          <ion-icon button (click)="toggleTaskStatus(item)" slot="end" name="return-up-back-outline"></ion-icon>
           <ion-icon button (click)="removeTask($index)" slot="end" color="danger" name="trash"></ion-icon>
           <!-- <ion-icon button id="hover-trigger" color="primary" name="pricetag-outline"></ion-icon> -->
         </ion-item>
@@ -70,18 +70,3 @@
   </ion-card>
 
 </ion-content>
-
-
-<ion-popover trigger="hover-trigger" triggerAction="hover">
-  <ng-template>
-    <ion-content class="ion-padding">
-      <ion-list>
-        @for (item of categoryList; track $index) {
-          <ion-item>
-            <ion-label>{{item}}</ion-label>
-          </ion-item>
-        }
-      </ion-list>
-    </ion-content>
-  </ng-template>
-</ion-popover>
