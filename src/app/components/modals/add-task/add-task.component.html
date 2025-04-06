@@ -1,0 +1,29 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Nueva Tarea</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()">Cancelar</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-item>
+    <ion-label position="floating">Nombre de la Tarea</ion-label>
+    <ion-input type="text" [(ngModel)]="taskName"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label>Categoría</ion-label>
+    <ion-select [(ngModel)]="selectedCategory" interface="popover">
+      @for (categorie of categoryList; track $index) {
+        <ion-select-option [value]="categorie">
+          {{ categorie }}
+        </ion-select-option>
+      }
+    </ion-select>
+  </ion-item>
+
+  <ion-button expand="full" (click)="saveTask()" [disabled]="!taskName">
+    Guardar Tarea
+  </ion-button>
+</ion-content>
