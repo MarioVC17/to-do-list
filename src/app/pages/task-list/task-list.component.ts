@@ -190,6 +190,12 @@ export class TaskListComponent  implements OnInit {
       }
     });
     modal.present();
+    const { role, data } = await modal.onDidDismiss();
+    if (role === 'saved' && data?.updatedCategories) {
+      this.categoryList = data.updatedCategories;
+      await this.saveCategoriesToStorage();
+      this.applyCategoryFilter();
+    }
   }
 
   /**
